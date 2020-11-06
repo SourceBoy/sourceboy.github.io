@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SourceBoy</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<style type="text/css">
+		body {
+			background-color: #000;
+			color: #fff;
+		}
+		code {
+			font-family: "Courier New", Courier, "Lucida Console", Monaco, monospace;
+			font-size: 14px;
+			word-wrap: break-word;
+		}
+	</style>
+</head>
+<body>
+	<code></code>
+	<script>
+		const $code = document.querySelector('code');
+		const cfg = {
+			method: 'GET',
+			mode: 'same-origin',
+			credentials: 'omit',
+			cache: 'default',
+			redirect: 'follow'
+		};
+
+		fetch('./code.js', cfg).then((r) => {
+			return r.text();
+		}).then((code) => {
+			const last = code.length - 1;
+			let height = $code.offsetHeight;
+			let i = 0;
+			const t = setInterval(() => {
+				if (i > last) {
+					return clearInterval(t);
+				}
+				$code.textContent += code[i];
+				i++;
+				const { offsetHeight } = $code;
+				if (offsetHeight !== height) {
+					window.scroll(0, offsetHeight);
+					height = offsetHeight;
+				}
+			}, 10);
+		}).catch((e) => {
+			$code.textContent = 'Code retrieval failed.';
+			console.error(e);
+		});
+	</script>
+</body>
+</html>
