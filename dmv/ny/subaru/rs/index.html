@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>RS in NY</title>
+	<title>GM6 &amp; GC6 in NY</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="robots" content="noindex">
+	<meta name="theme-color" content="#444444">
+	<meta property="og:title" content="GM6 &amp; GC6 in NY">
+	<meta property="og:description" name="description" content="Number of GM6 &amp; GC6 Imprezas in each NY county.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://sourceboy.com/dmv/ny/subaru/rs/">
+	<meta property="og:image" content="https://sourceboy.com/dmv/ny/subaru/rs/thumbnail.jpg">
 	<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
 	<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet'>
 	<style>
@@ -37,7 +42,7 @@
 	{
 		this.addSource('counties', {
 			type: 'geojson',
-			data: 'https://sourceboy.com/dmv/ny/subaru/rs/index.geojson'
+			data: 'https://sourceboy.com/dmv/ny/subaru/rs/geo.json'
 		});
 
 		this.addLayer({
@@ -54,6 +59,7 @@
 			id: 'county-labels',
 			type: 'symbol',
 			source: 'counties',
+			minzoom: 7,
 			layout: {
 				'text-allow-overlap': true,
 				'text-size': 16,
@@ -63,9 +69,10 @@
 		});
 
 		this.addLayer({
-			id: 'stats',
+			id: 'data',
 			type: 'symbol',
 			source: 'counties',
+			minzoom: 7.5,
 			layout: {
 				'text-allow-overlap': true,
 				'text-justify': 'left',
@@ -80,12 +87,6 @@
 			},
 			paint: { 'text-color': '#00ff00' }
 		});
-
-		/*
-		map.on('mousemove', function() {
-			console.info(map.getCenter(), map.getZoom());
-		});
-		*/
 	}
 
 	map.on('load', onMapLoad);
