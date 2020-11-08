@@ -42,13 +42,14 @@
 	{
 		this.addSource('counties', {
 			type: 'geojson',
-			data: 'https://sourceboy.com/dmv/ny/subaru/rs/geo.json'
+			data: 'https://sourceboy.com/dmv/ny/subaru/rs/index.geojson'
 		});
 
 		this.addLayer({
-			id: 'county-boundaries',
+			id: 'boundaries',
 			type: 'line',
 			source: 'counties',
+			filter: ['==', '$type', 'Polygon'],
 			paint: {
 				'line-color': '#66ccff',
 				'line-width': 1
@@ -56,23 +57,24 @@
 		});
 
 		this.addLayer({
-			id: 'county-labels',
+			id: 'labels',
 			type: 'symbol',
 			source: 'counties',
-			minzoom: 7,
+			filter: ['==', '$type', 'Point'],
+			paint: { 'text-color': '#66ccff' },
 			layout: {
 				'text-allow-overlap': true,
 				'text-size': 16,
 				'text-field': ['get', 'county']
 			},
-			paint: { 'text-color': '#66ccff' }
 		});
 
 		this.addLayer({
 			id: 'data',
 			type: 'symbol',
 			source: 'counties',
-			minzoom: 7.5,
+			filter: ['==', '$type', 'Point'],
+			paint: { 'text-color': '#00ff00' },
 			layout: {
 				'text-allow-overlap': true,
 				'text-justify': 'left',
@@ -85,7 +87,6 @@
 					'\nGC6: ', [ 'coalesce', [ 'get', '4d', ['get', 'data'] ], '0' ]
 				]
 			},
-			paint: { 'text-color': '#00ff00' }
 		});
 	}
 
