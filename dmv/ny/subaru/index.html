@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Subarus in NY</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="theme-color" content="#444444">
+	<meta property="og:title" content="Subarus in NY">
+	<meta property="og:description" name="description" content="Zoom in to see number of Subarus in each city.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://sourceboy.com/dmv/ny/subaru/">
+	<meta property="og:image" content="https://sourceboy.com/dmv/ny/subaru/thumbnail.jpg">
+	<script src='https://unpkg.com/mapbox-gl@^1.12.0/dist/mapbox-gl.js'></script>
+	<link href='https://unpkg.com/mapbox-gl@^1.12.0/dist/mapbox-gl.css' rel='stylesheet' type='text/css'>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script defer src="../../mapbox-token.js"></script>
+<script defer src="./index.js"></script>
+
+</body>
+</html>
