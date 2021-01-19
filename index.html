@@ -19,36 +19,62 @@
 <body>
 	<code></code>
 	<script>
-		const $code = document.querySelector('code');
+		// https://cors-anywhere.herokuapp.com/http://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt
+		// https://raw.githubusercontent.com/SourceBoy/sourceboy.github.io/master/code.js
+		const url = './code.js';
 		const cfg = {
 			method: 'GET',
-			mode: 'same-origin',
+			mode: 'cors',
 			credentials: 'omit',
 			cache: 'default',
 			redirect: 'follow'
 		};
+		const $code = document.querySelector('code');
+		const decoder = new TextDecoder();
+		const chunks = [];
+		let chars = [];
+		let height = 0; // $code.offsetHeight;
+		let pump_count = 0;
+		let timer;
 
-		fetch('./code.js', cfg).then((r) => {
-			return r.text();
-		}).then((code) => {
-			const last = code.length - 1;
-			let height = $code.offsetHeight;
-			let i = 0;
-			const t = setInterval(() => {
-				if (i > last) {
-					return clearInterval(t);
-				}
-				$code.textContent += code[i];
-				i++;
-				const { offsetHeight } = $code;
-				if (offsetHeight !== height) {
-					window.scroll(0, offsetHeight);
-					height = offsetHeight;
-				}
-			}, 10);
-		}).catch((e) => {
-			$code.textContent = 'Code retrieval failed.';
+		function process() {
+			const has_chunks = !!chunks.length;
+			const has_chars = !!chars.length;
+			if (!has_chunks && !has_chars) {
+				return clearInterval(timer);
+			}
+			if (!has_chars && has_chunks) {
+				console.info('chunks -> chars');
+				chars = Array.from(chunks.shift());
+			}
+			$code.textContent += chars.shift();
+			const { offsetHeight } = $code;
+			if (offsetHeight !== height) {
+				window.scroll(0, offsetHeight);
+				height = offsetHeight;
+			}
+		}
+
+		async function pump(reader) {
+			pump_count++;
+			const { done, value } = await reader.read();
+			if (done) {
+				console.info('done streaming');
+				return;
+			}
+			console.info('chunk %d: %d', pump_count, value.byteLength);
+			chunks.push(decoder.decode(value));
+			if (pump_count === 1) {
+				timer = setInterval(process, 10)
+			}
+			return pump(reader);
+		}
+
+		fetch(url, cfg).then((r) => {
+			return r.body.getReader();
+		}).then(pump).catch((e) => {
 			console.error(e);
+			( timer && clearInterval(timer) );
 		});
 	</script>
 </body>
