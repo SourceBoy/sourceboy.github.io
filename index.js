@@ -6,7 +6,7 @@ const emitter = new EventEmitter3();
 const chunks = [];
 let chars = [];
 
-const url = 'https://cors-anywhere.herokuapp.com/http://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt';
+const url = 'https://cors-anywhere.herokuapp.com/https://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt';
 const cfg = {
   method: 'GET',
   headers: {},
