@@ -1,10 +1,8 @@
 'use strict';
 
-const decoder = new TextDecoder();
 const emitter = new EventEmitter3();
-
+const decoder = new TextDecoder();
 const chunks = [];
-let chars = [];
 
 const url = 'https://cors-anywhere.herokuapp.com/https://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt';
 const cfg = {
@@ -22,8 +20,8 @@ async function pump(rs) {
     console.info('done streaming');
     return;
   }
-  console.info('chunk: %d', value.byteLength);
-  emitter.emit('chunk', decoder.decode(value));
+  console.info('pumping %d bytes', value.byteLength);
+  emitter.emit('data', value);
   return pump(rs);
 }
 
@@ -42,14 +40,22 @@ async function fetchRange(start = 0, end = 16383) {
     length = Number(_length);
   }
 
+  console.info(`fetching range ${start}-${end}/${length}`);
   await pump(rs);
   return { start, end, length };
 }
 
-emitter.once('chunk', () => {
+emitter.on('data', (data) => {
+  const chunk = decoder.decode(data);
+  chunks.push(chunk);
+  emitter.emit('chunk', chunk);
+});
+
+emitter.once('chunk', (chunk) => {
   const $code = document.querySelector('code');
   let height = 0; // $code.offsetHeight;
   let waiting = false;
+  let chars = [];
   let drainer;
   function process() {
     const has_chunks = !!chunks.length;
@@ -77,10 +83,6 @@ emitter.once('chunk', () => {
     waiting = false;
   });
   drainer = setInterval(process, 10);
-});
-
-emitter.on('chunk', (chunk) => {
-  chunks.push(chunk);
 });
 
 (function() {
