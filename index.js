@@ -1,5 +1,7 @@
 'use strict';
 
+import 'https://unpkg.com/eventemitter3@latest/umd/eventemitter3.min.js';
+
 const emitter = new EventEmitter3();
 const decoder = new TextDecoder();
 const chunks = [];
@@ -29,7 +31,6 @@ async function fetchRange(start = 0, end = 16383) {
   cfg.headers['Range'] = `bytes=${start}-${end}`;
 
   const response = await fetch(url, cfg);
-  const rs = response.body.getReader();
   const content_range = response.headers.get('content-range');
   let length = 0;
 
@@ -40,8 +41,8 @@ async function fetchRange(start = 0, end = 16383) {
     length = Number(_length);
   }
 
-  console.info(`fetching range ${start}-${end}/${length}`);
-  await pump(rs);
+  console.info(`fetched range ${start}-${end}/${length}`);
+  await pump(response.body.getReader());
   return { start, end, length };
 }
 
