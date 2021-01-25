@@ -1,8 +1,8 @@
 'use strict';
 
-import 'https://unpkg.com/eventemitter3@latest/umd/eventemitter3.min.js';
+import EventEmitter from 'https://cdn.skypack.dev/eventemitter3?min';
 
-const emitter = new EventEmitter3();
+const emitter = new EventEmitter();
 const decoder = new TextDecoder();
 const chunks = [];
 
