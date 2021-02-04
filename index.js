@@ -6,7 +6,7 @@ const emitter = new EventEmitter();
 const decoder = new TextDecoder();
 const chunks = [];
 
-const url = 'https://cors-anywhere.herokuapp.com/https://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt';
+const url = 'https://sourceboy.com/junk/node.js';
 const cfg = {
   method: 'GET',
   headers: {},
