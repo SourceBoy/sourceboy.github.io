@@ -41,7 +41,7 @@ function onMapLoad()
 {
 	this.addSource('zips', {
 		type: 'geojson',
-		data: 'https://sourceboy.com/dmv/ny/subaru/index.geojson',
+		data: 'https://github.sourceboy.com/dmv/ny/subaru/index.geojson',
 		cluster: true,
 		clusterProperties: {
 			sum_count: getSum('count'),

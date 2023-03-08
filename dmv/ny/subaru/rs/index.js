@@ -13,7 +13,7 @@ function onMapLoad()
 {
 	this.addSource('counties', {
 		type: 'geojson',
-		data: 'https://sourceboy.com/dmv/ny/subaru/rs/index.geojson'
+		data: 'https://github.sourceboy.com/dmv/ny/subaru/rs/index.geojson'
 	});
 
 	this.addLayer({
